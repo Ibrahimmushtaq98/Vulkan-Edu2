@@ -11,7 +11,7 @@ VK_LAYER_PATH = /Users/blah/macOS/share/vulkan/explicit_layer.d
 ```
 or perhaps run `setup-env.sh` as described in https://vulkan.lunarg.com/doc/sdk/latest/mac/getting_started.html
 
-i have to set the environment path for every lab, maybe theres a better way out there
+now i can use the cmake interface in `CMakeLists.txt` to choose which labs i want, or i have to uncomment and set the environment path for every lab
 
 for cloning, try
 ```sh

@@ -40,6 +40,24 @@ file(GLOB_RECURSE leebs
         )
 link_libraries(Vulkan::Vulkan glfw ${leebs})
 
+# Lab_X interface
+#set(Lab_X Lab\ 1)
+#set(Lab_X Lab\ 2)
+#set(Lab_X Lab\ 3)
+set(Lab_X SimulatedLib)
+file(GLOB_RECURSE Lab_X_files
+        ${Lab_X}/main.cpp
+        include/LHVulkan.*
+        include/cube_data.h
+        include/tiny_obj_loader.*
+        )
+add_executable(Lab_X ${Lab_X_files})
+# do tha copying
+add_custom_command(TARGET Lab_X
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_X}/shaders $<TARGET_FILE_DIR:Lab_X>/shaders)
+
+#[[
 # Lab_1
 set(Lab_1 Lab\ 1)
 file(GLOB_RECURSE Lab_1_files
@@ -168,3 +186,4 @@ add_executable(SimulatedLib ${SimulatedLib_files})
 add_custom_command(TARGET SimulatedLib
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${SimulatedLib}/shaders $<TARGET_FILE_DIR:SimulatedLib>/shaders)
+]]
