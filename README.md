@@ -1,5 +1,5 @@
 # vulkan-edu
-to start, i place the `shaders` folder and `.obj` files  in the debug folder and put my `vulkansdk` folder somewhere
+to start, i put the `.obj` files  in the debug folder and placed my `vulkansdk` to get `include/vulkansdk-macos/macOS`
 
 or you can change the working directory to `../Lab\ 1` and `../Lab\ 2` and such, just the ones containing the `main.cpp`
 

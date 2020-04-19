@@ -1,7 +1,7 @@
 set(CMAKE_CXX_STANDARD 17)
 
 # Vulkan
-set(ENV{VULKAN_SDK} vulkansdk-macos/macOS)
+set(ENV{VULKAN_SDK} include/vulkansdk-macos/macOS)
 find_package(Vulkan REQUIRED)
 
 # environment path for u mac users
@@ -48,6 +48,11 @@ file(GLOB_RECURSE Lab_1_files
         include/LHVulkan.*
         )
 add_executable(Lab_1 ${Lab_1_files})
+add_executable(Lab_1 ${Lab_1_files})
+# do tha copying
+add_custom_command(TARGET Lab_1
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_1}/shaders $<TARGET_FILE_DIR:Lab_1>/shaders)
 
 # Lab_2
 set(Lab_2 Lab\ 2)
@@ -56,10 +61,12 @@ file(GLOB_RECURSE Lab_2_files
         include/LHVulkan.*
         include/tiny_obj_loader.*
         include/cube_data.h
-        include/FreeImage.h
         )
 add_executable(Lab_2 ${Lab_2_files})
-target_link_libraries(Lab_2 lib/FreeImage.a)
+# do tha copying
+add_custom_command(TARGET Lab_2
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_2}/shaders $<TARGET_FILE_DIR:Lab_2>/shaders)
 
 # Lab_3
 set(Lab_3 Lab\ 3)
@@ -70,6 +77,10 @@ file(GLOB_RECURSE Lab_3_files
         include/LHVulkan.*
         )
 add_executable(Lab_3 ${Lab_3_files})
+# do tha copying
+add_custom_command(TARGET Lab_3
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_3}/shaders $<TARGET_FILE_DIR:Lab_3>/shaders)
 
 # Lab_4
 set(Lab_4 Lab\ 4)
@@ -80,6 +91,10 @@ file(GLOB_RECURSE Lab_4_files
         include/LHVulkan.*
         )
 add_executable(Lab_4 ${Lab_4_files})
+# do tha copying
+add_custom_command(TARGET Lab_4
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_4}/shaders $<TARGET_FILE_DIR:Lab_4>/shaders)
 
 # Lab_5
 set(Lab_5 Lab\ 5)
@@ -90,6 +105,10 @@ file(GLOB_RECURSE Lab_5_files
         include/LHVulkan.*
         )
 add_executable(Lab_5 ${Lab_5_files})
+# do tha copying
+add_custom_command(TARGET Lab_5
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_5}/shaders $<TARGET_FILE_DIR:Lab_5>/shaders)
 
 # Lab_6
 set(Lab_6 Lab\ 6)
@@ -104,6 +123,13 @@ file(GLOB_RECURSE Lab_6_files
 add_executable(Lab_6 ${Lab_6_files})
 target_include_directories(Lab_6 PUBLIC ${Lab_6})
 target_link_libraries(Lab_6 lib/FreeImage.a)
+# do tha copyings
+add_custom_command(TARGET Lab_6
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_6}/shaders $<TARGET_FILE_DIR:Lab_6>/shaders)
+add_custom_command(TARGET Lab_6
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${Lab_6}/crate1.jpg ${Lab_6}/crate2.jpg $<TARGET_FILE_DIR:Lab_6>)
 
 # Lab_7
 set(Lab_7 Lab\ 7)
@@ -114,6 +140,9 @@ file(GLOB_RECURSE Lab_7_files
         include/LHVulkan.*
         )
 add_executable(Lab_7 ${Lab_7_files})
+add_custom_command(TARGET Lab_7
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_7}/shaders $<TARGET_FILE_DIR:Lab_7>/shaders)
 
 # Lab_10
 set(Lab_10 Lab\ 10)
@@ -124,6 +153,9 @@ file(GLOB_RECURSE Lab_10_files
         include/LHVulkan.*
         )
 add_executable(Lab_10 ${Lab_10_files})
+add_custom_command(TARGET Lab_10
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_10}/shaders $<TARGET_FILE_DIR:Lab_10>/shaders)
 
 # SimulatedLib
 set(SimulatedLib SimulatedLib)
@@ -133,3 +165,6 @@ file(GLOB_RECURSE SimulatedLib_files
         include/LHVulkan.*
         )
 add_executable(SimulatedLib ${SimulatedLib_files})
+add_custom_command(TARGET SimulatedLib
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${SimulatedLib}/shaders $<TARGET_FILE_DIR:SimulatedLib>/shaders)
