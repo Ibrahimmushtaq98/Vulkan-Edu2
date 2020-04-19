@@ -1,12 +1,13 @@
 # vulkan-edu
-to start, i place the `shaders` folder and `.obj` files  in the debug folder
+to start, i place the `shaders` folder and `.obj` files  in the debug folder and put my `vulkansdk` folder somewhere
 
 or you can change the working directory to `../Lab\ 1` and `../Lab\ 2` and such, just the ones containing the `main.cpp`
 
-environment path for u mac users:
+for u mac users, copy the environment path from the cmake output, it should look like
 ```commandline
-VK_ICD_FILENAMES = /Users/mechs/Desktop/vulkan-edu-master/vulkansdk-macos/macOS/share/vulkan/icd.d/MoltenVK_icd.json;
-VK_LAYER_PATH = /Users/mechs/Desktop/vulkan-edu-master/vulkansdk-macos/macOS/share/vulkan/explicit_layer.d
+environment path for u mac users:
+VK_ICD_FILENAMES = /Users/blah/macOS/share/vulkan/icd.d/MoltenVK_icd.json;
+VK_LAYER_PATH = /Users/blah/macOS/share/vulkan/explicit_layer.d
 ```
 or perhaps run `setup-env.sh` as described in https://vulkan.lunarg.com/doc/sdk/latest/mac/getting_started.html
 
@@ -16,6 +17,8 @@ for cloning, try
 ```sh
 git clone --depth 1 --recurse-submodules https://github.com/Ibrahimmushtaq98/Vulkan-Edu2
 cd Vulkan-Edu2
+git submodule add https://github.com/glfw/glfw include/glfw
+git submodule add https://github.com/g-truc/glm include/glm
 git submodule update --remote
 ```
 
