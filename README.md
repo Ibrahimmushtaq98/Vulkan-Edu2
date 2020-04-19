@@ -1,5 +1,5 @@
 # vulkan-edu
-to start, i put the `.obj` files  in the debug folder and placed my `vulkansdk` to get `include/vulkansdk-macos/macOS`
+to start, i put the `.obj` files  in the debug folder and placed my `vulkansdk` to get `external/vulkansdk-macos/macOS`
 
 or you can change the working directory to `../Lab\ 1` and `../Lab\ 2` and such, just the ones containing the `main.cpp`
 
@@ -11,14 +11,14 @@ VK_LAYER_PATH = /Users/blah/macOS/share/vulkan/explicit_layer.d
 ```
 or perhaps run `setup-env.sh` as described in https://vulkan.lunarg.com/doc/sdk/latest/mac/getting_started.html
 
-now i can use the cmake interface in `CMakeLists.txt` to choose which labs i want, or i have to uncomment and set the environment path for every lab
+i have to set the environment path for every lab, maybe theres a better way out there
 
 for cloning, try
 ```sh
 git clone --depth 1 --recurse-submodules https://github.com/Ibrahimmushtaq98/Vulkan-Edu2
 cd Vulkan-Edu2
-git submodule add https://github.com/glfw/glfw include/glfw
-git submodule add https://github.com/g-truc/glm include/glm
+git submodule add https://github.com/glfw/glfw external/glfw
+git submodule add https://github.com/g-truc/glm external/glm
 git submodule update --remote
 ```
 

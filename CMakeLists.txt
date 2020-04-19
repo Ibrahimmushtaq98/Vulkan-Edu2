@@ -1,7 +1,7 @@
 set(CMAKE_CXX_STANDARD 17)
 
 # Vulkan
-set(ENV{VULKAN_SDK} include/vulkansdk-macos/macOS)
+set(ENV{VULKAN_SDK} external/vulkansdk-macos/macOS)
 find_package(Vulkan REQUIRED)
 
 # environment path for u mac users
@@ -20,25 +20,31 @@ option(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" OFF)
 option(GLFW_BUILD_TESTS "Build the GLFW test programs" OFF)
 option(GLFW_BUILD_DOCS "Build the GLFW documentation" OFF)
 option(GLFW_INSTALL "Generate installation target" OFF)
-add_subdirectory(include/glfw)
+add_subdirectory(external/glfw)
 
 # GLM
 set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
-#add_subdirectory(include/glm)
+#add_subdirectory(external/glm)
 FIND_PATH(GLM_INCLUDE_DIR "glm/glm.hpp"
-        PATHS include/glm)
+        PATHS external/glm)
 message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
 
 include_directories(
         ${GLM_INCLUDE_DIR}
         include/
+        external/
 )
 
-# i need all the libs?
+# i need all the libs? no just shaderc_combined
 file(GLOB_RECURSE leebs
         $ENV{VULKAN_SDK}/lib/*.a
         )
-link_libraries(Vulkan::Vulkan glfw ${leebs})
+
+find_library(shaderc_combined_D shaderc_combined $ENV{VULKAN_SDK}/lib)
+
+link_libraries(Vulkan::Vulkan glfw ${shaderc_combined_D}
+        ${leebs}
+        )
 
 # Lab_X interface
 #set(Lab_X Lab\ 1)
@@ -54,8 +60,8 @@ file(GLOB_RECURSE Lab_X_files
 add_executable(Lab_X ${Lab_X_files})
 # do tha copying
 add_custom_command(TARGET Lab_X
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_X}/shaders $<TARGET_FILE_DIR:Lab_X>/shaders)
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_X}/shaders $<TARGET_FILE_DIR:Lab_X>/shaders)
 
 #[[
 # Lab_1
