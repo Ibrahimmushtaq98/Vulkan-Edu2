@@ -40,17 +40,26 @@ file(GLOB_RECURSE leebs
         $ENV{VULKAN_SDK}/lib/*.a
         )
 
-find_library(shaderc_combined_D shaderc_combined $ENV{VULKAN_SDK}/lib)
+find_library(shaderc_combined_LIB shaderc_combined $ENV{VULKAN_SDK}/lib)
 
-link_libraries(Vulkan::Vulkan glfw ${shaderc_combined_D}
+#[[
+add_library(shaderc_combined UNKNOWN IMPORTED)
+set_target_properties(shaderc_combined PROPERTIES
+        IMPORTED_LOCATION "${shaderc_combined_LIB}")
+
+link_directories($ENV{VULKAN_SDK}/lib)
+]]
+
+link_libraries(Vulkan::Vulkan glfw ${shaderc_combined_LIB}
         ${leebs}
+        #        shaderc_combined
         )
 
 # Lab_X interface
-#set(Lab_X Lab\ 1)
-#set(Lab_X Lab\ 2)
-#set(Lab_X Lab\ 3)
-set(Lab_X SimulatedLib)
+#set(Lab_X "Lab 1")
+#set(Lab_X "Lab 2")
+set(Lab_X "Lab 3")
+#set(Lab_X SimulatedLib)
 file(GLOB_RECURSE Lab_X_files
         ${Lab_X}/main.cpp
         include/LHVulkan.*
@@ -65,7 +74,7 @@ add_custom_command(TARGET Lab_X
 
 #[[
 # Lab_1
-set(Lab_1 Lab\ 1)
+set(Lab_1 "Lab 1")
 file(GLOB_RECURSE Lab_1_files
         ${Lab_1}/main.cpp
         include/cube_data.h
@@ -79,7 +88,7 @@ add_custom_command(TARGET Lab_1
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_1}/shaders $<TARGET_FILE_DIR:Lab_1>/shaders)
 
 # Lab_2
-set(Lab_2 Lab\ 2)
+set(Lab_2 "Lab 2")
 file(GLOB_RECURSE Lab_2_files
         ${Lab_2}/main.cpp
         include/LHVulkan.*
@@ -93,7 +102,7 @@ add_custom_command(TARGET Lab_2
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_2}/shaders $<TARGET_FILE_DIR:Lab_2>/shaders)
 
 # Lab_3
-set(Lab_3 Lab\ 3)
+set(Lab_3 "Lab 3")
 file(GLOB_RECURSE Lab_3_files
         ${Lab_3}/main.cpp
         include/tiny_obj_loader.*
@@ -107,7 +116,7 @@ add_custom_command(TARGET Lab_3
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_3}/shaders $<TARGET_FILE_DIR:Lab_3>/shaders)
 
 # Lab_4
-set(Lab_4 Lab\ 4)
+set(Lab_4 "Lab 4")
 file(GLOB_RECURSE Lab_4_files
         ${Lab_4}/main.cpp
         include/tiny_obj_loader.*
@@ -121,7 +130,7 @@ add_custom_command(TARGET Lab_4
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_4}/shaders $<TARGET_FILE_DIR:Lab_4>/shaders)
 
 # Lab_5
-set(Lab_5 Lab\ 5)
+set(Lab_5 "Lab 5")
 file(GLOB_RECURSE Lab_5_files
         ${Lab_5}/main.cpp
         include/tiny_obj_loader.*
@@ -135,7 +144,7 @@ add_custom_command(TARGET Lab_5
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_5}/shaders $<TARGET_FILE_DIR:Lab_5>/shaders)
 
 # Lab_6
-set(Lab_6 Lab\ 6)
+set(Lab_6 "Lab 6")
 file(GLOB_RECURSE Lab_6_files
         ${Lab_6}/main.cpp
         ${Lab_6}/texture.*
@@ -156,7 +165,7 @@ add_custom_command(TARGET Lab_6
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${Lab_6}/crate1.jpg ${Lab_6}/crate2.jpg $<TARGET_FILE_DIR:Lab_6>)
 
 # Lab_7
-set(Lab_7 Lab\ 7)
+set(Lab_7 "Lab 7")
 file(GLOB_RECURSE Lab_7_files
         ${Lab_7}/main.cpp
         include/tiny_obj_loader.*
@@ -169,7 +178,7 @@ add_custom_command(TARGET Lab_7
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${Lab_7}/shaders $<TARGET_FILE_DIR:Lab_7>/shaders)
 
 # Lab_10
-set(Lab_10 Lab\ 10)
+set(Lab_10 "Lab 10")
 file(GLOB_RECURSE Lab_10_files
         ${Lab_10}/main.cpp
         include/tiny_obj_loader.*
@@ -192,4 +201,50 @@ add_executable(SimulatedLib ${SimulatedLib_files})
 add_custom_command(TARGET SimulatedLib
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/${SimulatedLib}/shaders $<TARGET_FILE_DIR:SimulatedLib>/shaders)
+]]
+
+#[[
+# from https://github.com/stanthesoupking/Shade/blob/master/CMakeLists.txt
+# Get GLFW3
+find_package(glfw3)
+
+# Check if library was found
+if(NOT glfw3_FOUND)
+	message("Failed to find local copy of GLFW, downloading copy of Github...")
+	set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+	set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+	set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+	FetchContent_Declare(
+		glfw3
+		GIT_REPOSITORY https://github.com/glfw/glfw
+	)
+
+	FetchContent_MakeAvailable(glfw3)
+endif()
+
+# Get GLM
+FetchContent_Declare(
+	glm
+	GIT_REPOSITORY https://github.com/g-truc/glm
+)
+
+set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(glm)
+]]
+
+#[[
+# from https://cliutils.gitlab.io/modern-cmake/chapters/projects/submodule.html
+execute_process(COMMAND ${GIT_EXECUTABLE} submodule add https://github.com/glfw/glfw external/glfw
+        ${GIT_EXECUTABLE} submodule add https://github.com/g-truc/glm external/glm
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        RESULT_VARIABLE GIT_SUBMOD_RESULT)
+]]
+
+#[[
+# from https://cmake.org/cmake/help/latest/module/ExternalProject.html#examples
+include(ExternalProject)
+ExternalProject_Add(foobar
+  GIT_REPOSITORY    https://github.com/glfw/glfw external/glfw
+)
 ]]
