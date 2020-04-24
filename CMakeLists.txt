@@ -15,8 +15,6 @@ message(STATUS "")
 if(NOT CMAKE_VERSION VERSION_LESS 3.7.0 AND NOT USE_BUILT_IN_SDK)
     message(STATUS "Using module to find Vulkan")
     find_package(Vulkan)
-    set(GLSLANG_DIR ${Vulkan_INCLUDE_DIRS}/../glslang)
-    message(STATUS ${GLSLANG_DIR})
 else()
     message(STATUS "Using the built in SDK for Vulkan")
 endif()
@@ -28,19 +26,7 @@ ELSE()
     message(STATUS ${Vulkan_SDK_DIRS})
 ENDIF()
 
-set(GLSLANGLIBS
-    glslang
-    HLSL
-    OSDependent
-    OGLCompiler
-    SPIRV)
-
-#Took from Anvil Vulkan
-if (MSVC)
-    set (DEFAULT_DYNAMIC_VK_DLL "vulkan-1.dll")
-else()
-    set (DEFAULT_DYNAMIC_VK_DLL "libvulkan.so")
-endif()
+set(GLSLANGLIBS glslang HLSL OSDependent OGLCompiler SPIRV)
 
 include_directories(include)
 include_directories(external)
@@ -50,14 +36,17 @@ include_directories(external/glfw/include)
 SET (SRC_LIST "include/Vulkan_Edu.h"
               "src/Vulkan_Edu.cpp")
 
-
 if (NOT MSVC)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
 endif()
 
 if (WIN32)
     include_directories($ENV{VK_SDK_PATH}/Include
-                        $ENV{VULKAN_SDK}/Include)
+                        $ENV{VULKAN_SDK}/Include
+                        $ENV{VK_SDK_PATH}/SPIRV
+                        $ENV{VULKAN_SDK}/SPIRV
+                        $ENV{VK_SDK_PATH}/glslang
+                        $ENV{VULKAN_SDK}/glslang)
 else()
     include_directories($ENV{VK_SDK_PATH}/x86_64/include
                         $ENV{VULKAN_SDK}/include
