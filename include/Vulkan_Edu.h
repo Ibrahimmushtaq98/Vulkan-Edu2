@@ -14,7 +14,6 @@
 #elif _WIN32
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define VK_USE_PLATFORM_WIN32_KHR
-#include <vulkan/vulkan_win32.h>
 #else
 #error Platform Not Supported
 #endif
@@ -31,10 +30,6 @@
 #include <string>
 #include <assert.h>
 #include <vector>
-
-// #if _WIN32
-// #include <Windows.h>
-// #endif
 
 #define GET_INSTANCE_PROC_ADDR(inst, entrypoint)                               \
     {                                                                          \
