@@ -3,6 +3,15 @@ include_directories(${CMAKE_SOURCE_DIR}external)
 include_directories(${CMAKE_SOURCE_DIR}external/glm)
 include_directories(${CMAKE_SOURCE_DIR}external/glfw/include)
 
+if(UNIX)
+FIND_PACKAGE(X11 REQUIRED)
+SET(OS_SPECIFIC_LIBS
+   xcb
+   X11-xcb
+   ${X11_LIBRARIES}
+)
+endif()
+
 if (NOT MSVC)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -std=c++17")
 endif()
@@ -23,4 +32,7 @@ endif()
 SET (SRC_LIST "src/main.cpp")
 add_executable(Lab_1 ${SRC_LIST})
 target_link_libraries(Lab_1 Vulkan_Edu glfw glslang HLSL OSDependent OGLCompiler SPIRV Vulkan::Vulkan)
+if(UNIX)
+target_link_libraries(Lab_1 ${OS_SPECIFIC_LIBS})
+endif()
 file(COPY "shaders" DESTINATION "./")

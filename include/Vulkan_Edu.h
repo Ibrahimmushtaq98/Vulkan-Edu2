@@ -9,6 +9,8 @@
 
 #ifdef __linux__
 #define GLFW_EXPOSE_NATIVE_X11
+#define VK_USE_PLATFORM_XCB_KHR
+#include <X11/Xlib-xcb.h>
 #elif __APPLE__
 #define GLFW_EXPOSE_NATIVE_COCOA
 #elif _WIN32

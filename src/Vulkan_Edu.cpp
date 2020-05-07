@@ -246,9 +246,15 @@ VkResult createSwapChainExtention(struct LHContext& context) {
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
 	VkXcbSurfaceCreateInfoKHR surfaceCreateInfo = {};
 	surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
-	surfaceCreateInfo.connection = connection;
-	surfaceCreateInfo.window = window;
-	err = vkCreateXcbSurfaceKHR(instance, &surfaceCreateInfo, nullptr, &surface);
+	surfaceCreateInfo.connection = XGetXCBConnection(glfwGetX11Display());
+	surfaceCreateInfo.window = glfwGetX11Window(context.window);;
+	res = vkCreateXcbSurfaceKHR(context.instance, &surfaceCreateInfo, nullptr, &context.surface);
+#elif defined(VK_USE_PLATFORM_XLIB_KHR)
+	VkXlibSurfaceCreateInfoKHR surfaceCreateInfo = {};
+	surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
+	surfaceCreateInfo.dpy = glfwGetX11Display();
+	surfaceCreateInfo.window = glfwGetX11Window(context.window);
+	res = vkCreateXlibSurfaceKHR(context.instance, &surfaceCreateInfo, nullptr, &context.surface);
 #endif
 	assert(res == VK_SUCCESS);
 

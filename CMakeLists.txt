@@ -12,7 +12,11 @@ include_directories(external/glfw/include)
 
 add_subdirectory(external/glfw)
 add_subdirectory(external/glslang)
-find_package(vulkan REQUIRED)
+if(WIN32)
+    find_package(vulkan REQUIRED)
+else()
+    find_package(Vulkan REQUIRED)
+endif()
 
 SET (SRC_LIST "include/Vulkan_Edu.h"
               "src/Vulkan_Edu.cpp")
