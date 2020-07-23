@@ -394,3 +394,6 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 .vscode/
+
+# But not these files...
+!data/*
