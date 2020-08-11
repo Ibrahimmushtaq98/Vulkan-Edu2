@@ -6,7 +6,6 @@
 
 #include <Vulkan_Edu.h>
 #include <tiny_obj_loader.h>
-#include <texture.h>
 #include <FreeImage.h>
 
 #define OBJ_MESH
