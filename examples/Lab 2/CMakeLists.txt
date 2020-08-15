@@ -29,7 +29,7 @@ else()
                         $ENV{VULKAN_SDK}/x86_64/include)
 endif()
 
-SET (SRC_LIST "src/main.cpp" ${CMAKE_SOURCE_DIR}/include/tiny_obj_loader.cc)
+SET (SRC_LIST "src/main.cpp" ${CMAKE_SOURCE_DIR}/include/tiny_obj_loader_OLD.cc)
 add_executable(Lab_2 ${SRC_LIST})
 target_link_libraries(Lab_2 Vulkan_Edu glfw glslang HLSL OSDependent OGLCompiler SPIRV Vulkan::Vulkan)
 if(UNIX)

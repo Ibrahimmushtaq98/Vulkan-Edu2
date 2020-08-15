@@ -5,7 +5,7 @@
 
 #include <Vulkan_Edu.h>
 #include <cube_data.h>
-#include <tiny_obj_loader.h>
+#include <tiny_obj_loader_OLD.h>
 
 #define PLANE_MESH
 #define OBJ_MESH
