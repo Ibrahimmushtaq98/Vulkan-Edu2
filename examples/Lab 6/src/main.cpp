@@ -595,18 +595,25 @@ void prepareTexture2(struct LHContext& context, struct appState& state, std::str
 	VkResult U_ASSERT_ONLY res;
 	bool U_ASSERT_ONLY pass;
 
-	VkFormat format = VK_FORMAT_R8G8B8A8_UNORM;
+	FreeImage_Initialise();
+	VkFormat format;
+
+	#ifdef FREEIMAGE_BIGENDIAN
+	format = VK_FORMAT_R8G8B8A8_UNORM;
+	#else
+	format = VK_FORMAT_B8G8R8A8_UNORM;
+	#endif
 
 	//Grab the File Format
 	FREE_IMAGE_FORMAT formatT = FreeImage_GetFIFFromFilename(filename.c_str());
-	std::wstring filenameS(filename.begin(), filename.end());
-	FIBITMAP* bitImage = FreeImage_LoadU(formatT, filenameS.c_str());
 
 	//Checks if the format exist within FreeImage
-	if (format == FIF_UNKNOWN) {
+	if (formatT == FIF_UNKNOWN) {
 		printf("Unknown file type for texture image file %s\n", filename);
 		return;
 	}
+
+	FIBITMAP* bitImage = FreeImage_Load(formatT, filename.c_str());
 
 	//Checks if the image is 32 Bit (RGBA)
 	if (FreeImage_GetBPP(bitImage) != 32) {
@@ -619,11 +626,17 @@ void prepareTexture2(struct LHContext& context, struct appState& state, std::str
 	FREE_IMAGE_TYPE bitImageType = FreeImage_GetImageType(bitImage);
 	FREE_IMAGE_COLOR_TYPE  btImageColorType = FreeImage_GetColorType(bitImage);
 
+	//FreeImage_SetOutputMessage(FreeImage_OutputMessageFunction());
+
 	state.mesh.textureData.width = FreeImage_GetWidth(bitImage);
 	state.mesh.textureData.height = FreeImage_GetHeight(bitImage);
 	state.mesh.textureData.depth = FreeImage_GetBPP(bitImage);
 	state.mesh.textureData.size = state.mesh.textureData.width * state.mesh.textureData.height * (state.mesh.textureData.depth / 8);
 	state.mesh.textureData.data = FreeImage_GetBits(bitImage);
+
+	std::cout << state.mesh.textureData.width << std::endl;
+	std::cout << state.mesh.textureData.height << std::endl;
+
 
 	VkMemoryAllocateInfo memAllocInfo = {};
 	memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -800,6 +813,8 @@ void prepareTexture2(struct LHContext& context, struct appState& state, std::str
 	state.mesh.textureData.descriptor.imageView = state.mesh.textureData.view;
 	state.mesh.textureData.descriptor.sampler = state.mesh.textureData.sampler;
 	state.mesh.textureData.descriptor.imageLayout = state.mesh.textureData.imageLayout;
+
+	FreeImage_DeInitialise();
 }
 
 void setupDescriptorSets(struct LHContext& context, struct appState& state) {
@@ -850,7 +865,6 @@ void setupDescriptorSets(struct LHContext& context, struct appState& state) {
 	// For simplicity we will update once per set instead
 
 	vkUpdateDescriptorSets(context.device, static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
-
 }
 
 void setupDescriptorPool(struct LHContext& context, struct appState& state) {
@@ -1111,6 +1125,8 @@ void loadMesh(struct LHContext& context, struct appState& state, std::string fil
 	indexCount = static_cast<uint32_t>(indices.size());
 	state.mesh.i.count = indexCount;
 
+	std::cout << state.mesh.i.count << std::endl;
+
 	res = mapIndiciesToGPU(context, indices.data(), indices.size() * sizeof(uint32_t), state.mesh.i.buffer, state.mesh.i.memory);
 	assert(res == VK_SUCCESS);
 	res = mapVerticiesToGPU(context, vertices.data(), vertices.size() * sizeof(Vertex), state.mesh.v.buffer, state.mesh.v.memory);
@@ -1319,7 +1335,7 @@ int main() {
 
 	//---> Implement our own functions
 	prepareShader(context, state, "./shaders/shader.vert", "./shaders/shader.frag");
-	prepareTexture2(context, state, "data/crate1.jpg");
+	prepareTexture2(context, state, "./data/crate1.jpg");
 	//prepareQuads(context, state);
 	loadMesh(context, state, "./data/cube.obj");
 	prepareUniformBuffers(context, state);
@@ -1328,9 +1344,6 @@ int main() {
 	setupDescriptorSets(context, state);
 	preparePipelines(context, state);
 	buildCommandBuffer(context, state);
-
-	//preparePipelines(context, state);
-	//buildCommandBuffers(context, state);
 
 	glfwSetKeyCallback(context.window, key_callback);
 	renderLoop(context, state);

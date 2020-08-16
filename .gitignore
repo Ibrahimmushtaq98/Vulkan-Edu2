@@ -397,3 +397,4 @@ _deps
 
 # But not these files...
 !data/*
+!lib/libfreeimage.a

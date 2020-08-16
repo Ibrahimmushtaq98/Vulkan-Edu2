@@ -31,13 +31,13 @@ endif()
 
 SET (SRC_LIST "src/main.cpp" ${CMAKE_SOURCE_DIR}/include/tiny_obj_loader.cc)
 add_executable(Lab_6 ${SRC_LIST})
-target_link_libraries(Lab_6 Vulkan_Edu glfw glslang HLSL OSDependent OGLCompiler SPIRV Vulkan::Vulkan ${CMAKE_SOURCE_DIR}/lib/FreeImage.lib)
-if(UNIX)
-target_link_libraries(Lab_6 ${OS_SPECIFIC_LIBS})
-endif()
 
 if(WIN32)
+target_link_libraries(Lab_6 Vulkan_Edu glfw glslang HLSL OSDependent OGLCompiler SPIRV Vulkan::Vulkan ${CMAKE_SOURCE_DIR}/lib/FreeImage.lib)
 configure_file("${CMAKE_SOURCE_DIR}/lib/FreeImage.dll" "${CMAKE_BINARY_DIR}/examples/Lab\ 6/Debug/FreeImage.dll" COPYONLY)
+elseif(UNIX)
+target_link_libraries(Lab_6 Vulkan_Edu glfw glslang HLSL OSDependent OGLCompiler SPIRV Vulkan::Vulkan ${CMAKE_SOURCE_DIR}/lib/libfreeimage.a)
+target_link_libraries(Lab_6 ${OS_SPECIFIC_LIBS})
 endif()
 
 file(COPY "shaders" DESTINATION "./")
